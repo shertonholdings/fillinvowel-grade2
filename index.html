@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fill in the Vowel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .container {
+            margin: 0 auto;
+            width: 300px;
+        }
+        .word-box {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        .choices {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .choice {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .choice:hover {
+            background-color: #0056b3;
+        }
+        #message {
+            margin-top: 20px;
+        }
+        #more-lessons {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 30px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        #logo {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Logo -->
+<img id="logo" src="https://i.imgur.com/mwpTHJj.png" alt="Logo" width="150">
+
+<h1>Fill in the Vowel</h1>
+<p>Choose the correct long vowel to complete the word:</p>
+
+<div class="container">
+    <div class="word-box" id="word-box">c__ke</div>
+    <div class="choices">
+        <div class="choice" data-vowel="a">a</div>
+        <div class="choice" data-vowel="e">e</div>
+        <div class="choice" data-vowel="i">i</div>
+    </div>
+    <p id="message"></p>
+</div>
+
+<!-- More Lessons Button -->
+<a id="more-lessons" href="https://sites.google.com/view/grades-2/home" style="display: none;">More Lessons</a>
+
+<script>
+    const words = [
+        { word: "c__ke", vowel: "a", options: ["a", "e", "i"] },
+        { word: "b__ke", vowel: "i", options: ["a", "i", "o"] },
+        { word: "r__n", vowel: "u", options: ["e", "u", "i"] },
+        { word: "tr__e", vowel: "e", options: ["e", "i", "a"] },
+        { word: "b__t", vowel: "a", options: ["a", "o", "i"] },
+        { word: "f__ke", vowel: "a", options: ["a", "i", "e"] },
+        { word: "r__pe", vowel: "o", options: ["a", "e", "o"] },  // Corrected to 'r__pe'
+        { word: "l__ne", vowel: "i", options: ["i", "u", "o"] },
+        { word: "sl__de", vowel: "i", options: ["i", "a", "o"] },
+        { word: "t__pe", vowel: "a", options: ["a", "i", "o"] },
+        { word: "gl__de", vowel: "i", options: ["i", "e", "o"] },
+        { word: "k__te", vowel: "i", options: ["i", "e", "a"] },
+        { word: "sh__ne", vowel: "i", options: ["i", "a", "e"] },
+        { word: "p__ne", vowel: "i", options: ["i", "u", "o"] },
+        { word: "wh__le", vowel: "o", options: ["o", "u", "i"] },
+        { word: "gr__pe", vowel: "a", options: ["a", "e", "i"] },
+        { word: "h__ke", vowel: "i", options: ["i", "e", "a"] },
+        { word: "cl__ne", vowel: "i", options: ["i", "a", "e"] },
+        { word: "m__le", vowel: "a", options: ["a", "e", "i"] },
+        { word: "b__te", vowel: "i", options: ["i", "a", "o"] }
+    ];
+
+    let currentWordIndex = 0;
+    const wordBox = document.getElementById('word-box');
+    const choices = document.querySelectorAll('.choice');
+    const message = document.getElementById('message');
+    const moreLessonsButton = document.getElementById('more-lessons');
+
+    function loadWord() {
+        wordBox.textContent = words[currentWordIndex].word;
+        const options = words[currentWordIndex].options;
+        choices.forEach((choice, index) => {
+            choice.textContent = options[index];
+            choice.setAttribute('data-vowel', options[index]);
+        });
+    }
+
+    function checkAnswer(e) {
+        const chosenVowel = e.target.getAttribute('data-vowel');
+        const correctVowel = words[currentWordIndex].vowel;
+
+        // Show the chosen vowel in the word
+        let currentWord = words[currentWordIndex].word.replace("__", chosenVowel);
+        wordBox.textContent = currentWord;
+
+        if (chosenVowel === correctVowel) {
+            message.textContent = "Correct!";
+            message.style.color = "green";
+            currentWordIndex++;
+            if (currentWordIndex < words.length) {
+                setTimeout(loadWord, 1000); // Load the next word after 1 second
+            } else {
+                message.textContent = "Great job! You've completed all the words!";
+                moreLessonsButton.style.display = 'inline-block';  // Show the "More Lessons" button
+            }
+        } else {
+            message.textContent = "Oops! Try again.";
+            message.style.color = "red";
+            setTimeout(loadWord, 1000); // Reset the word after 1 second
+        }
+    }
+
+    loadWord();
+
+    choices.forEach(choice => {
+        choice.addEventListener('click', checkAnswer);
+    });
+</script>
+
+</body>
+</html>
